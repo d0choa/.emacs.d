@@ -22,6 +22,7 @@
                       scpaste
                       polymode
 		      textmate
+                      volatile-highlights
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -65,6 +66,10 @@
       (exec-path-from-shell-initialize))
 
 (textmate-mode)
+
+;; Highlights volatile actitions such as paste
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
 
 ; magit
 (require 'magit)
