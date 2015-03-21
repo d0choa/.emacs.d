@@ -84,9 +84,6 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; turn on automatic bracket insertion by pairs. New in emacs 24
-(electric-pair-mode 1)
-
 ; spell checker
 (setq flyspell-issue-welcome-flag nil)
 (if (eq system-type 'darwin)
