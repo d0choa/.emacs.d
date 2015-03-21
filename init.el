@@ -14,6 +14,7 @@
                       find-file-in-project
                       idle-highlight-mode
                       ido-ubiquitous
+                      flx-ido
                       markdown-mode
                       flycheck
                       magit
@@ -23,6 +24,8 @@
                       polymode
 		      textmate
                       volatile-highlights
+                      smartparens
+                      clean-aindent-mode
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -75,9 +78,22 @@
 (require 'magit)
 
 ; Ido to navigate the filesystem
-(ido-mode t)
-(setq ido-enable-flex-matching t
-      ido-use-virtual-buffers t)
+(setq ido-enable-prefix nil
+      ido-enable-flex-matching t
+      ido-use-virtual-buffers t
+      ido-create-new-buffer 'always
+      ido-use-filename-at-point 'guess
+      ido-max-prospects 10
+      ido-default-file-method 'selected-window
+      ido-auto-merge-work-directories-length -1)
+
+(ido-mode +1)
+(ido-ubiquitous-mode +1)
+;;; smarter fuzzy matching for ido
+(flx-ido-mode +1)
+;; disable ido faces to see flx highlights
+(setq ido-use-faces nil)
+
 
 ; Line numbers
 (global-linum-mode 1)
@@ -88,6 +104,17 @@
 ; Autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
+
+;; Package: smartparens
+(require 'smartparens-config)
+(setq sp-base-key-bindings 'paredit)
+(setq sp-autoskip-closing-pair 'always)
+(setq sp-hybrid-kill-entire-symbol nil)
+(sp-use-paredit-bindings)
+
+;; Automatically cleanup useless whitespaced on moving up/down
+(require 'clean-aindent-mode)
+(add-hook 'prog-mode-hook 'clean-aindent-mode)
 
 ; spell checker
 (setq flyspell-issue-welcome-flag nil)
