@@ -17,12 +17,8 @@
                       markdown-mode
                       flycheck
                       magit
-                      ; paredit
-                      r-autoyas
                       smex
-                      ; smartparens
                       scpaste
-                      yasnippet
                       polymode
                       ; writegood-mode
 		      textmate
@@ -180,16 +176,6 @@
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
 
-; ;; Load yasnippet
-; Next is necessary to install a list of default snippets
-; git clone --recursive https://github.com/capitaomorte/yasnippet
-(add-to-list 'load-path
-              "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
-
-; (require 'r-autoyas)
-; (add hook 'ess-mode-hook 'r-autoyas-ess-activate)
 
 ; ;;
 ; ;; Load autocomplete
