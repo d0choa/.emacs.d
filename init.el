@@ -16,7 +16,6 @@
                       ido-ubiquitous
                       markdown-mode
                       flycheck
-                      magit
                       smex
                       scpaste
                       polymode
@@ -68,10 +67,6 @@
       (exec-path-from-shell-initialize))
 
 (textmate-mode)
-
-; magit
-(require 'magit)
-(global-set-key (kbd "C-x g") 'magit-status)
 
 ; Ido to navigate the filesystem
 (ido-mode t)
