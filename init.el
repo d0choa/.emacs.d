@@ -47,9 +47,6 @@
 ; Prevent functions to access the clipboard
 (setq x-select-enable-clipboard nil)
 
-;Change windows
-(global-set-key [C-tab] 'other-window)
-
 ; Yes or No in one character
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -71,7 +68,6 @@
 
 ; magit
 (require 'magit)
-(global-set-key (kbd "C-x g") 'magit-status)
 
 ; Ido to navigate the filesystem
 (ido-mode t)
@@ -109,6 +105,7 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-c C-k") 'compile)
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key [C-tab] 'other-window) ;Change windows
 
 ; Markdown mode
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
@@ -116,7 +113,6 @@
 (add-hook 'markdown-mode-hook
           (lambda ()
             (visual-line-mode t)
-            (writegood-mode t)
             (flyspell-mode t)))
 (setq markdown-command "pandoc --smart -f markdown -t html")
 ; (setq markdown-css-path (expand-file-name "markdown.css" abedra/vendor-dir))
