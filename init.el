@@ -16,10 +16,11 @@
                       ido-ubiquitous
                       markdown-mode
                       flycheck
+                      magit
+                      r-autoyas
                       smex
                       scpaste
                       polymode
-                      ; writegood-mode
 		      textmate
                       ))
 
@@ -68,6 +69,10 @@
 
 (textmate-mode)
 
+; magit
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+
 ; Ido to navigate the filesystem
 (ido-mode t)
 (setq ido-enable-flex-matching t
@@ -75,6 +80,9 @@
 
 ; Line numbers
 (global-linum-mode 1)
+
+;; Anything that writes to the buffer while the region is active will overwrite it, including paste, but also simply typing something or hitting backspace
+(delete-selection-mode 1)
 
 ; Autocomplete
 (require 'auto-complete-config)
@@ -101,34 +109,6 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-c C-k") 'compile)
 (global-set-key (kbd "C-x g") 'magit-status)
-
-
-; Indentation and spaces
-(defun untabify-buffer ()
-  (interactive)
-  (untabify (point-min) (point-max)))
-
-(defun indent-buffer ()
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-(defun cleanup-buffer ()
-  "Perform a bunch of operations on the whitespace content of a buffer."
-  (interactive)
-  (indent-buffer)
-  (untabify-buffer)
-  (delete-trailing-whitespace))
-
-(defun cleanup-region (beg end)
-  "Remove tmux artifacts from region."
-  (interactive "r")
-  (dolist (re '("\\\\│\·*\n" "\W*│\·*"))
-    (replace-regexp re "" nil beg end)))
-
-(global-set-key (kbd "C-x M-t") 'cleanup-region)
-(global-set-key (kbd "C-c n") 'cleanup-buffer)
-
-; (setq-default show-trailing-whitespace t)
 
 ; Markdown mode
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
@@ -171,6 +151,9 @@
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
 
+
+; (require 'r-autoyas)
+; (add hook 'ess-mode-hook 'r-autoyas-ess-activate)
 
 ; ;;
 ; ;; Load autocomplete
