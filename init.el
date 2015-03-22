@@ -24,7 +24,6 @@
                       polymode
 		      textmate
                       volatile-highlights
-                      smartparens
                       clean-aindent-mode
                       color-theme-sanityinc-tomorrow
                       ))
@@ -111,16 +110,10 @@
 (require 'auto-complete-config)
 (ac-config-default)
 
-;; Package: smartparens
-(require 'smartparens-config)
-(setq sp-base-key-bindings 'paredit)
-(setq sp-autoskip-closing-pair 'always)
-(setq sp-hybrid-kill-entire-symbol nil)
-(sp-use-paredit-bindings)
-
-;; Automatically cleanup useless whitespaced on moving up/down
-(require 'clean-aindent-mode)
-(add-hook 'prog-mode-hook 'clean-aindent-mode)
+;; Electric pair, indentation, layout
+(electric-indent-mode 1)
+(electric-pair-mode 1)
+(electric-layout-mode 1)
 
 ; spell checker
 (setq flyspell-issue-welcome-flag nil)
