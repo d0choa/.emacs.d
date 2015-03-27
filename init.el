@@ -61,6 +61,9 @@
 ; Desactivate alarm
 (setq ring-bell-function 'ignore)
 
+;; Emacs will not automatically add new lines (stop scrolling at end of file)
+(setq next-line-add-newlines nil)
+
 ; Prevent functions to access the clipboard
 (setq x-select-enable-clipboard nil)
 
