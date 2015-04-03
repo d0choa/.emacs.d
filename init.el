@@ -26,6 +26,7 @@
                       volatile-highlights
                       clean-aindent-mode
                       color-theme-sanityinc-tomorrow
+                      yaml-mode
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -92,6 +93,10 @@
 
 ; magit
 (require 'magit)
+
+;; yaml mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ; Ido to navigate the filesystem
 (setq ido-enable-prefix nil
