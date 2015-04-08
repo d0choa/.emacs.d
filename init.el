@@ -222,6 +222,10 @@
 (setq comint-scroll-to-bottom-on-input t)
 (setq comint-scroll-to-bottom-on-output t)
 (setq comint-move-point-for-output t)
+
+;; Limit buffer size
+(add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)
+
 (defun my-ess-start-R ()
   (interactive)
   (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
