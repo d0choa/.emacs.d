@@ -118,6 +118,7 @@
 
 ; Line numbers
 (add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'ess-mode-hook 'linum-mode)
 
 ;; Anything that writes to the buffer while the region is active will overwrite it, including paste, but also simply typing something or hitting backspace
 (delete-selection-mode 1)
