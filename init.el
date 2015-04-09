@@ -225,6 +225,8 @@
 
 (setq ess-ask-for-ess-directory nil)
 (setq ess-local-process-name "R")
+(setq ess-history-directory "~/.R/")
+(setq ansi-color-for-comint-mode 'filter)
 ;;(setq inferior-R-program-name "/usr/local/bin/R")
 (setq ansi-color-for-comint-mode 'filter)
 (setq comint-scroll-to-bottom-on-input t)
@@ -262,6 +264,19 @@
           '(lambda()
              (local-set-key [(shift return)] 'my-ess-eval)))
 (require 'ess-site)
+
+; Do not replace _ with <-
+(ess-toggle-underscore nil)
+
+(defun my-ess-post-run-hook ()
+  (ess-execute-screen-options)
+  (local-set-key "\C-cw" 'ess-execute-screen-options))
+(add-hook 'ess-post-run-hook 'my-ess-post-run-hook)
+
+; Save/load history of minibuffer
+(savehist-mode 1)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
