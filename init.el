@@ -43,12 +43,12 @@
 (set-face-attribute 'default nil :foundry "apple" :family "Monaco")
 
 (setq redisplay-dont-pause t)
-(setq redisplay-dont-pause t
-  scroll-margin 1
-  scroll-step 1
-  scroll-conservatively 10000
-  scroll-preserve-screen-position 1)
-(setq-default scroll-up-aggressively 0.01 scroll-down-aggressively 0.01)
+(setq scroll-margin 1
+      scroll-conservatively 0
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+(setq-default scroll-up-aggressively 0.01
+	      scroll-down-aggressively 0.01)
 
 ; Load theme
 (add-to-list 'load-path "~/.emacs.d/themes/")
