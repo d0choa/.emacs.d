@@ -28,6 +28,7 @@
                       color-theme-sanityinc-tomorrow
                       yaml-mode
                       git-gutter-fringe+
+                      rainbow-mode
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -120,6 +121,15 @@
 ; Line numbers
 (add-hook 'prog-mode-hook 'linum-mode)
 (add-hook 'ess-mode-hook 'linum-mode)
+
+;; Rainbow colors
+(add-hook 'css-mode-hook 'my-css-mode-hook)
+(defun my-css-mode-hook ()
+  (rainbow-mode 1))
+
+(add-hook 'ess-mode-hook 'my-ess-mode-hook)
+(defun my-ess-mode-hook ()
+  (rainbow-mode 1))
 
 ;; Anything that writes to the buffer while the region is active will overwrite it, including paste, but also simply typing something or hitting backspace
 (delete-selection-mode 1)
