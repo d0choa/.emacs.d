@@ -58,7 +58,7 @@
 
 (require 'color-theme-sanityinc-tomorrow)
 (require 'sanityinc-tomorrow-day-theme)
-(color-theme-sanityinc-tomorrow-day)
+(color-theme-sanityinc-tomorrow-bright)
 
 
 ; Desactivate alarm
