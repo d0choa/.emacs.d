@@ -229,9 +229,9 @@
 ;; Mark additions/deletions in a git repo, on the margin
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
-(set-face-foreground 'git-gutter-fr:modified "yellow")
-(set-face-foreground 'git-gutter-fr:added    "#006600")
-(set-face-foreground 'git-gutter-fr:deleted  "#660000")
+(set-face-foreground 'git-gutter+-modified "#e7c547")
+(set-face-foreground 'git-gutter+-added    "#e7c547")
+(set-face-foreground 'git-gutter+-deleted  "#e7c547")
 
 
 ;; Adapted with one minor change from Felipe Salazar at
