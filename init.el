@@ -17,6 +17,7 @@
                       flx-ido
                       markdown-mode
                       flycheck
+                      flycheck-pos-tip
                       magit
                       r-autoyas
                       smex
@@ -29,6 +30,8 @@
                       yaml-mode
                       git-gutter-fringe+
                       rainbow-mode
+                      fill-column-indicator
+                      color-theme
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -39,9 +42,6 @@
 (dolist (package my-packages)
   (unless (package-installed-p package)
     (package-install package)))
-
-; Font
-(set-face-attribute 'default nil :foundry "apple" :family "Monaco")
 
 (setq redisplay-dont-pause t)
 (setq scroll-margin 1
@@ -56,10 +56,41 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;; (load-theme 'tomorrow-night t)
 
-(require 'color-theme-sanityinc-tomorrow)
-(require 'sanityinc-tomorrow-day-theme)
-(color-theme-sanityinc-tomorrow-bright)
+;; (require 'color-theme-sanityinc-tomorrow)
+;; (require 'sanityinc-tomorrow-day-theme)
+;; (color-theme-sanityinc-tomorrow-bright)
+;; dark theme
+;; (load-theme 'deeper-blue)
 
+(load-file "~/.emacs.d/themes/color-theme-almost-monokai.el")
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-almost-monokai)
+
+
+;; ; Font
+;; (set-face-attribute 'default nil :foundry "apple" :family "Monaco")
+;; set all windows (emacs's "frame") to use font DejaVu Sans Mono
+(set-frame-font "DejaVu Sans Mono-11" t t)
+(when (member "Symbola" (font-family-list))
+  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+
+;; no toolbar
+(tool-bar-mode -1)
+
+;; no scrollbars
+(scroll-bar-mode -1)
+
+;; mark fill column
+(require 'fill-column-indicator)
+
+;; Better looking terminal windows
+;; Space after line numbers
+(when (not(display-graphic-p)) (add-hook 'window-configuration-change-hook
+					 (lambda ()
+					   (setq linum-format "%4d "))))
+;; Turn off menu bar
+(when (not(display-graphic-p)) (menu-bar-mode -1))
 
 ; Desactivate alarm
 (setq ring-bell-function 'ignore)
@@ -118,20 +149,36 @@
 (setq ido-use-faces nil)
 
 
-; Line numbers
-(add-hook 'prog-mode-hook 'linum-mode)
-(add-hook 'ess-mode-hook 'linum-mode)
+(defun my-common-hook ()
+  ;; my customizations for all of c-mode and related modes
+  (when (display-graphic-p) (fci-mode nil))
+  (linum-mode 1)
+  (rainbow-mode 1) ;; Rainbow colors
+  )
 
-;; Rainbow colors
+(add-hook 'prog-mode-hook 'my-common-hook)
+(add-hook 'R-mode-hook 'my-common-hook)
+
+
+; Load hook
+(add-hook 'prog-mode-hook 'my-common-hook)
+(add-hook 'ess-mode-hook 'my-common-hook)
+
+;; Activate flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; Display tip on flycheck
+(eval-after-load 'flycheck
+  '(custom-set-variables
+   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+
 (add-hook 'css-mode-hook 'my-css-mode-hook)
 (defun my-css-mode-hook ()
   (rainbow-mode 1))
 
-(add-hook 'ess-mode-hook 'my-ess-mode-hook)
-(defun my-ess-mode-hook ()
-  (rainbow-mode 1))
 
-;; Anything that writes to the buffer while the region is active will overwrite it, including paste, but also simply typing something or hitting backspace
+;; Anything that writes to the buffer while the region is active will overwrite
+;; it, including paste, but also simply typing something or hitting backspace
 (delete-selection-mode 1)
 
 ; Autocomplete
@@ -207,24 +254,32 @@
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
 
+; Variables I set up from within emacs
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auto-save-default nil)
+ '(comint-move-point-for-output nil)
+ '(comint-scroll-show-maximum-output nil)
+ '(comint-scroll-to-bottom-on-input nil)
+ '(compilation-ask-about-save nil)
+ '(compilation-auto-jump-to-first-error nil)
+ '(compilation-environment nil)
+ '(compilation-read-command nil)
+ '(compilation-scroll-output (quote first-error))
+ '(compile-command "make")
+ '(fci-rule-character-color "#272821")
+ '(fci-rule-color "#272821")
+ '(fci-rule-column 80)
+ '(fill-column 80)
+ '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
+ '(inhibit-startup-screen t)
+ '(linum-delay t)
+ '(linum-eager t)
+ '(linum-format " %4d"))
 
-; (require 'r-autoyas)
-; (add hook 'ess-mode-hook 'r-autoyas-ess-activate)
-
-; ;;
-; ;; Load autocomplete
-; ;;
-; (require 'auto-complete)
-; (require 'auto-complete-config)
-; (global-auto-complete-mode t)
-; (add-to-list 'ac-dictionary-directories (expand-file-name "auto-complete" dotfiles-dir))
-; (setq ac-modes (append ac-modes '(org-mode)))
-; (ac-config-default)
-; (define-key ac-complete-mode-map [tab] 'ac-expand)
-; (setq ac-auto-start 4)
-; (ac-flyspell-workaround)
-; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-; (define-key ac-completing-map (kbd "C-c h") 'ac-quick-help)
 
 ;; Mark additions/deletions in a git repo, on the margin
 (require 'git-gutter-fringe+)
@@ -233,6 +288,8 @@
 (set-face-foreground 'git-gutter+-added    "#e7c547")
 (set-face-foreground 'git-gutter+-deleted  "#e7c547")
 
+;; Color of the fringe
+(set-face-background 'fringe "#272821")
 
 ;; Adapted with one minor change from Felipe Salazar at
 ;; http://www.emacswiki.org/emacs/EmacsSpeaksStatistics
@@ -289,45 +346,6 @@
 
 ; Save/load history of minibuffer
 (savehist-mode 1)
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   (vector "#c5c8c6" "#cc6666" "#b5bd68" "#f0c674" "#81a2be" "#b294bb" "#8abeb7" "#1d1f21"))
- '(custom-enabled-themes (quote (sanityinc-tomorrow-bright)))
- '(custom-safe-themes
-   (quote
-    ("1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "645599a2aab022fd7677124515a3104a60ba64d2cafdd77a6e7703f8ae97250c" "cf08ae4c26cacce2eebff39d129ea0a21c9d7bf70ea9b945588c1c66392578d1" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" "5ee12d8250b0952deefc88814cf0672327d7ee70b16344372db9460e9a0e3ffc" "7f1263c969f04a8e58f9441f4ba4d7fb1302243355cb9faecb55aec878a06ee9" default)))
- '(fci-rule-color "#373b41")
- '(inhibit-startup-screen t)
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#cc6666")
-     (40 . "#de935f")
-     (60 . "#f0c674")
-     (80 . "#b5bd68")
-     (100 . "#8abeb7")
-     (120 . "#81a2be")
-     (140 . "#b294bb")
-     (160 . "#cc6666")
-     (180 . "#de935f")
-     (200 . "#f0c674")
-     (220 . "#b5bd68")
-     (240 . "#8abeb7")
-     (260 . "#81a2be")
-     (280 . "#b294bb")
-     (300 . "#cc6666")
-     (320 . "#de935f")
-     (340 . "#f0c674")
-     (360 . "#b5bd68"))))
- '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
