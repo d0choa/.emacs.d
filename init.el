@@ -71,7 +71,7 @@
 ;; ; Font
 ;; (set-face-attribute 'default nil :foundry "apple" :family "Monaco")
 ;; set all windows (emacs's "frame") to use font DejaVu Sans Mono
-(set-frame-font "DejaVu Sans Mono-11" t t)
+(set-frame-font "Menlo-12" t t)
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
