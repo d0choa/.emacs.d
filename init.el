@@ -337,7 +337,6 @@
 (ess-toggle-underscore nil)
 
 (defun my-ess-post-run-hook ()
-  (ess-execute-screen-options)
   (local-set-key "\C-cw" 'ess-execute-screen-options))
 (add-hook 'ess-post-run-hook 'my-ess-post-run-hook)
 
