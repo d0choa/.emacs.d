@@ -166,11 +166,7 @@
 
 ;; Activate flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
-
-;; Display tip on flycheck
-(eval-after-load 'flycheck
-  '(custom-set-variables
-   '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+'(flycheck-lintr-caching nil)
 
 (add-hook 'css-mode-hook 'my-css-mode-hook)
 (defun my-css-mode-hook ()
