@@ -275,6 +275,7 @@
  '(fci-rule-column 80)
  '(fill-column 80)
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
+ '(flycheck-lintr-caching nil)
  '(inhibit-startup-screen t)
  '(linum-delay t)
  '(linum-eager t)
