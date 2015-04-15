@@ -31,7 +31,7 @@
                       git-gutter-fringe+
                       rainbow-mode
                       fill-column-indicator
-                      color-theme
+                      monokai-theme
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -54,18 +54,8 @@
 ; Load theme
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-;; (load-theme 'tomorrow-night t)
 
-;; (require 'color-theme-sanityinc-tomorrow)
-;; (require 'sanityinc-tomorrow-day-theme)
-;; (color-theme-sanityinc-tomorrow-bright)
-;; dark theme
-;; (load-theme 'deeper-blue)
-
-(load-file "~/.emacs.d/themes/color-theme-almost-monokai.el")
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-almost-monokai)
+(load-theme 'monokai)
 
 
 ;; ; Font
@@ -275,15 +265,16 @@
  '(inhibit-startup-screen t)
  '(linum-delay t)
  '(linum-eager t)
- '(linum-format " %4d"))
+ '(linum-format " %4d")
+ '(magit-use-overlays nil))
 
 
 ;; Mark additions/deletions in a git repo, on the margin
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
-(set-face-foreground 'git-gutter+-modified "#e7c547")
-(set-face-foreground 'git-gutter+-added    "#e7c547")
-(set-face-foreground 'git-gutter+-deleted  "#e7c547")
+;; (set-face-foreground 'git-gutter+-modified "#e7c547")
+;; (set-face-foreground 'git-gutter+-added    "#e7c547")
+;; (set-face-foreground 'git-gutter+-deleted  "#e7c547")
 
 ;; Color of the fringe
 (set-face-background 'fringe "#272821")
@@ -348,3 +339,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; (set-face-attribute 'ac-candidate-face nil   :background "#00222c" :foreground "light gray")
+;; (set-face-attribute 'ac-selection-face nil   :background "SteelBlue4" :foreground "white")
+;; (set-face-attribute 'popup-tip-face    nil   :background "#003A4E" :foreground "light gray")
+
+(add-hook 'ess-mode (lambda () (add-to-list 'ac-sources 'ac-source-R)))
+
+(defvar sanityinc/fci-mode-suppressed nil)
+(defadvice popup-create (before suppress-fci-mode activate)
+  "Suspend fci-mode while popups are visible"
+  (set (make-local-variable 'sanityinc/fci-mode-suppressed) fci-mode)
+  (when fci-mode
+    (turn-off-fci-mode)))
+(defadvice popup-delete (after restore-fci-mode activate)
+  "Restore fci-mode when all popups have closed"
+  (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
+    (setq sanityinc/fci-mode-suppressed nil)
+    (turn-on-fci-mode)))
