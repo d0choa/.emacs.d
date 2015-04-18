@@ -148,7 +148,7 @@
 
 (add-hook 'prog-mode-hook 'my-common-hook)
 (add-hook 'R-mode-hook 'my-common-hook)
-
+(add-hook 'markdown-mode-hook 'my-common-hook)
 
 ; Load hook
 (add-hook 'prog-mode-hook 'my-common-hook)
