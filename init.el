@@ -240,6 +240,9 @@
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
 
+;; Wrap line in markdown. Comment if you don't dislike words cut in the middle
+(add-hook 'markdown-mode-hook (lambda () (visual-line-mode 1)))
+
 ; Variables I set up from within emacs
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
