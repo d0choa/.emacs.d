@@ -55,7 +55,7 @@
 (add-to-list 'load-path "~/.emacs.d/themes/")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
-(load-theme 'monokai)
+(load-theme 'monokai t)
 
 
 ;; ; Font
