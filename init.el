@@ -32,6 +32,7 @@
                       rainbow-mode
                       fill-column-indicator
                       monokai-theme
+                      dirtree
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -227,6 +228,9 @@
 ; YAML mode
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
+
+;; dirtree
+(require 'dirtree)
 
 ;polymode
 (require 'poly-R)
