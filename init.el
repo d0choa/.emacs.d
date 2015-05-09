@@ -267,10 +267,10 @@
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(flycheck-lintr-caching nil)
  '(inhibit-startup-screen t)
+ '(initial-scratch-message "")
  '(linum-delay t)
  '(linum-eager t)
- '(linum-format " %4d")
- '(magit-use-overlays nil))
+ '(linum-format " %4d"))
 
 
 ;; Mark additions/deletions in a git repo, on the margin
