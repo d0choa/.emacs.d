@@ -25,14 +25,14 @@
                       polymode
 		      textmate
                       volatile-highlights
-                      clean-aindent-mode
                       color-theme-sanityinc-tomorrow
                       yaml-mode
                       git-gutter-fringe+
                       rainbow-mode
                       fill-column-indicator
                       monokai-theme
-                      dirtree
+                      sr-speedbar
+                      expand-region
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -62,7 +62,7 @@
 ;; ; Font
 ;; (set-face-attribute 'default nil :foundry "apple" :family "Monaco")
 ;; set all windows (emacs's "frame") to use font DejaVu Sans Mono
-(set-frame-font "Menlo-12" t t)
+(set-frame-font "Monaco-12" t t)
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
@@ -147,13 +147,12 @@
   (rainbow-mode 1) ;; Rainbow colors
   )
 
-(add-hook 'prog-mode-hook 'my-common-hook)
-(add-hook 'R-mode-hook 'my-common-hook)
-(add-hook 'markdown-mode-hook 'my-common-hook)
+;; (add-hook 'R-mode-hook 'my-common-hook)
+;; (add-hook 'markdown-mode-hook 'my-common-hook)
 
 ; Load hook
 (add-hook 'prog-mode-hook 'my-common-hook)
-(add-hook 'ess-mode-hook 'my-common-hook)
+;; (add-hook 'ess-mode-hook 'my-common-hook)
 
 ;; Activate flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -171,6 +170,7 @@
 ; Autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
+(global-auto-complete-mode)
 
 ;; Electric pair, indentation, layout
 (electric-indent-mode 1)
@@ -204,12 +204,6 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.mdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-hook 'markdown-mode-hook
-          (lambda ()
-            (visual-line-mode t)
-            (flyspell-mode t)))
-(setq markdown-command "pandoc --smart -f markdown -t html")
-; (setq markdown-css-path (expand-file-name "markdown.css" abedra/vendor-dir))
 
 ; Ruby
 (add-hook 'ruby-mode-hook
@@ -229,20 +223,34 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$" . yaml-mode))
 
-;; dirtree
-(require 'dirtree)
-
-;polymode
-(require 'poly-R)
-(require 'poly-markdown)
-
-;;; MARKDOWN
-(add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
+;; Load speedbar in the same frame, do not refresh it
+;; automatically
+(require 'sr-speedbar)
+(add-hook 'speedbar-mode-hook (lambda () (linum-mode -1)))
+;; (sr-speedbar-open)
+(sr-speedbar-refresh-turn-off)
 
 ;;; R modes
 (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+;; (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+
+(require 'poly-R)
+(require 'poly-markdown)
+
+(defun rmd-mode ()
+  "ESS Markdown mode for rmd files"
+  (interactive)
+  (require 'poly-R)
+  (require 'poly-markdown) 
+  (poly-markdown+r-mode))
+
+;; Let you use markdown buffer easily
+(setq ess-nuke-trailing-whitespace-p nil) 
+
+(add-to-list 'auto-mode-alist '("\\.Rmd" . rmd-mode))
+(add-to-list 'auto-mode-alist '("\\.rmd\\'" . rmd-mode))
+
 
 ; Variables I set up from within emacs
 (custom-set-variables
@@ -250,6 +258,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ac-auto-show-menu 0.8)
+ '(ac-auto-start 2)
+ '(ac-quick-help-delay 0.1)
+ '(auto-save-default nil)
  '(auto-save-default nil)
  '(comint-move-point-for-output nil)
  '(comint-scroll-show-maximum-output nil)
@@ -260,14 +272,24 @@
  '(compilation-read-command nil)
  '(compilation-scroll-output (quote first-error))
  '(compile-command "make")
+ '(custom-safe-themes
+   (quote
+    ("a041a61c0387c57bb65150f002862ebcfe41135a3e3425268de24200b82d6ec9" default)))
  '(fci-rule-character-color "#272821")
  '(fci-rule-color "#272821")
  '(fci-rule-column 80)
+ '(global-linum-mode nil)
  '(fill-column 80)
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(flycheck-lintr-caching nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message "")
+ '(show-paren-mode t)
+ '(speedbar-default-position (quote left))
+ '(sr-speedbar-auto-refresh nil)
+ '(sr-speedbar-max-width 30)
+ '(sr-speedbar-right-side nil)
+ '(sr-speedbar-width-x 30)
  '(linum-delay t)
  '(linum-eager t)
  '(linum-format " %4d"))
@@ -283,18 +305,21 @@
 ;; Color of the fringe
 (set-face-background 'fringe "#272821")
 
+
+; For R. The first two lines are needed *before* loading 
+; ess, to set indentation to two spaces
+(setq ess-default-style 'DEFAULT)
+(setq ess-indent-level 2)
+(setq ess-history-directory "~/.R/")
+
 ;; Adapted with one minor change from Felipe Salazar at
 ;; http://www.emacswiki.org/emacs/EmacsSpeaksStatistics
-
 (setq ess-ask-for-ess-directory nil)
 (setq ess-local-process-name "R")
-(setq ess-history-directory "~/.R/")
 (setq ansi-color-for-comint-mode 'filter)
 ;;(setq inferior-R-program-name "/usr/local/bin/R")
-(setq ansi-color-for-comint-mode 'filter)
 (setq comint-scroll-to-bottom-on-input t)
 (setq comint-scroll-to-bottom-on-output t)
-(setq comint-move-point-for-output t)
 
 ;; Limit buffer size
 (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)
@@ -331,9 +356,38 @@
 ; Do not replace _ with <-
 (ess-toggle-underscore nil)
 
+; does not work for if you press `M-;`, but does work for <TAB>
+(setq ess-fancy-comments nil)
+(setq ess-indent-level 2)
+; from http://stackoverflow.com/a/25219054/2723794 thank god, ESS apparently considers function bodies to be "continued statements", which are apparently independent of indent level! sheesh
+(setq ess-first-continued-statement-offset 2
+      ess-continued-statement-offset 0)
+
+;; Some keys for ESS
+(define-key input-decode-map "\e\eOA" [(meta up)])
+(define-key input-decode-map "\e\eOB" [(meta down)])
+
 (defun my-ess-post-run-hook ()
   (local-set-key "\C-cw" 'ess-execute-screen-options))
 (add-hook 'ess-post-run-hook 'my-ess-post-run-hook)
+
+;; ???
+(setq url-http-attempt-keepalives nil)
+
+(eval-after-load "comint"
+  '(progn
+     (define-key comint-mode-map [C-up]
+       'comint-previous-matching-input-from-input)
+     (define-key comint-mode-map [C-down]
+       'comint-next-matching-input-from-input)
+     ;; also recommended for ESS use --
+     (setq comint-scroll-to-bottom-on-output nil)
+     (setq comint-scroll-show-maximum-output nil)
+     ;; somewhat extreme, almost disabling writing in *R*,
+     ;; *shell* buffers above prompt:
+     (setq comint-scroll-to-bottom-on-input 'this)
+     ))
+
 
 ; Save/load history of minibuffer
 (savehist-mode 1)
@@ -361,3 +415,34 @@
   (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
     (setq sanityinc/fci-mode-suppressed nil)
     (turn-on-fci-mode)))
+
+;;; Transparency (in standalone X11) ;;;
+; from http://www.emacswiki.org/emacs/TransparentEmacs#toc1
+;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
+(set-frame-parameter (selected-frame) 'alpha '(100 85))
+(add-to-list 'default-frame-alist '(alpha 100 85))
+; use C-c t to turn on/off transparency?
+(eval-when-compile (require 'cl))
+(defun toggle-transparency ()
+  (interactive)
+  (if (/=
+       (cadr (frame-parameter nil 'alpha))
+       100)
+      (set-frame-parameter nil 'alpha '(100 100))
+    (set-frame-parameter nil 'alpha '(100 85))))
+(global-set-key (kbd "C-c t") 'toggle-transparency)
+
+;;; Whitespace. ;;;
+; Show tabs
+(setq white-space-style '(tabs tab-mark))
+; Show trailing whitespace
+
+;;; Windowing. ;;;
+; Winner mode, which makes it easy to go back/forward in window changes
+; This uses "C-c left/right" to remember window stuff
+(when (fboundp 'winner-mode)
+     (winner-mode 1))
+
+(require 'expand-region)
+(global-set-key (kbd "C-<") 'er/expand-region)
+
