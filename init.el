@@ -19,7 +19,6 @@
                       flycheck
                       flycheck-pos-tip
                       magit
-                      r-autoyas
                       smex
                       scpaste
                       polymode
@@ -32,6 +31,8 @@
                       fill-column-indicator
                       monokai-theme
                       sr-speedbar
+                      yasnippet
+                      r-autoyas
                       expand-region
                       ))
 
@@ -118,6 +119,14 @@
 ; magit
 (require 'magit)
 
+;; yasnippet
+(require 'yasnippet)
+(yas/global-mode 1)
+
+;; ;; r-autoyas
+(require 'r-autoyas)
+(add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
+
 ;; yaml mode
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -170,7 +179,11 @@
 ; Autocomplete
 (require 'auto-complete-config)
 (ac-config-default)
-(global-auto-complete-mode)
+(global-auto-complete-mode t)
+(ac-flyspell-workaround)
+(define-key ac-complete-mode-map [tab] 'ac-expand)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(define-key ac-completing-map (kbd "C-c h") 'ac-quick-help)  
 
 ;; Electric pair, indentation, layout
 (electric-indent-mode 1)
@@ -258,14 +271,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-auto-show-menu 0.8)
- '(ac-auto-start 2)
- '(ac-quick-help-delay 0.1)
+ '(ac-auto-show-menu 0.3)
+ '(ac-auto-start 4)
+ '(ac-quick-help-delay 1)
  '(auto-save-default nil)
  '(auto-save-default nil)
  '(comint-move-point-for-output nil)
- '(comint-scroll-show-maximum-output nil)
- '(comint-scroll-to-bottom-on-input nil)
+ '(comint-scroll-show-maximum-output t)
+ '(comint-scroll-to-bottom-on-input t)
  '(compilation-ask-about-save nil)
  '(compilation-auto-jump-to-first-error nil)
  '(compilation-environment nil)
@@ -326,15 +339,18 @@
 
 (defun my-ess-start-R ()
   (interactive)
-  (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
-      (progn
-        (delete-other-windows)
-        (setq w1 (selected-window))
-        (setq w1name (buffer-name))
-        (setq w2 (split-window w1 nil t))
-        (R)
-        (set-window-buffer w2 "*R*")
-        (set-window-buffer w1 w1name))))
+  (or (assq 'inferior-ess-mode
+            (mapcar 
+              (lambda (buff) (list (buffer-local-value 'major-mode buff)))
+              (buffer-list)))
+   (progn
+     (delete-other-windows)
+     (setq w1 (selected-window))
+     (setq w1name (buffer-name))
+     (setq w2 (split-window w1 nil t))
+     (R)
+     (set-window-buffer w2 "*R*")
+     (set-window-buffer w1 w1name))))
 (defun my-ess-eval ()
   (interactive)
   (my-ess-start-R)
@@ -376,9 +392,9 @@
 
 (eval-after-load "comint"
   '(progn
-     (define-key comint-mode-map [C-up]
+     (define-key comint-mode-map [up]
        'comint-previous-matching-input-from-input)
-     (define-key comint-mode-map [C-down]
+     (define-key comint-mode-map [down]
        'comint-next-matching-input-from-input)
      ;; also recommended for ESS use --
      (setq comint-scroll-to-bottom-on-output nil)
