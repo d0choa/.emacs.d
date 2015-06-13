@@ -261,6 +261,9 @@
 (add-to-list 'auto-mode-alist '("\\.Rmd" . rmd-mode))
 (add-to-list 'auto-mode-alist '("\\.rmd\\'" . rmd-mode))
 
+;; Lintrs
+
+(setq flycheck-lintr-linters "with_defaults(camel_case_linter=NULL, trailing_whitespace_linter=NULL,line_length_linter=lintr::line_length_linter(120))")
 
 ; Variables I set up from within emacs
 (custom-set-variables
