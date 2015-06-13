@@ -286,25 +286,58 @@
  '(compile-command "make")
  '(custom-safe-themes
    (quote
-    ("a041a61c0387c57bb65150f002862ebcfe41135a3e3425268de24200b82d6ec9" default)))
- '(fci-rule-character-color "#272821")
- '(fci-rule-color "#272821")
- '(fci-rule-column 80)
- '(global-linum-mode nil)
- '(fill-column 80)
+    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "146cc293f18ea1e17d29833b495193d0455bf1e2b30ecc0f2551a77027338576" "8abee8a14e028101f90a2d314f1b03bed1cde7fd3f1eb945ada6ffc15b1d7d65" "a041a61c0387c57bb65150f002862ebcfe41135a3e3425268de24200b82d6ec9" default)))
+ '(ess-R-font-lock-keywords
+   (quote
+    ((ess-R-fl-keyword:modifiers . t)
+     (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:keywords . t)
+     (ess-R-fl-keyword:assign-ops . t)
+     (ess-R-fl-keyword:constants . t)
+     (ess-fl-keyword:fun-calls . t)
+     (ess-fl-keyword:numbers . t)
+     (ess-R-fl-keyword:F&T . t))))
+ '(fci-rule-character-color "#474841")
+ '(fci-rule-color "#474841")
+ '(fci-rule-column 120)
+ '(fill-column 120)
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(flycheck-lintr-caching nil)
+ '(global-linum-mode nil)
+ '(inferior-R-font-lock-keywords
+   (quote
+    ((ess-S-fl-keyword:prompt n\. t)
+     (ess-R-fl-keyword:modifiers . t)
+     (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:keywords . t)
+     (ess-R-fl-keyword:assign-ops . t)
+     (ess-R-fl-keyword:constants . t)
+     (ess-R-fl-keyword:messages . t)
+     (ess-fl-keyword:matrix-labels . t)
+     (ess-fl-keyword:fun-calls . t)
+     (ess-fl-keyword:numbers . t)
+     (ess-R-fl-keyword:F&T))))
  '(inhibit-startup-screen t)
  '(initial-scratch-message "")
+ '(linum-delay t)
+ '(linum-eager t)
+ '(linum-format " %4d")
+ '(magit-use-overlays nil)
  '(show-paren-mode t)
  '(speedbar-default-position (quote left))
  '(sr-speedbar-auto-refresh nil)
  '(sr-speedbar-max-width 30)
  '(sr-speedbar-right-side nil)
- '(sr-speedbar-width-x 30)
- '(linum-delay t)
- '(linum-eager t)
- '(linum-format " %4d"))
+ '(sr-speedbar-width-x 30))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-lock-comment-delimiter-face ((t (:inherit font-lock-comment-face :foreground "gray50" :slant normal))))
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(linum ((t (:inherit (shadow default) :background "#272821" :height 0.9)))))
 
 
 ;; Mark additions/deletions in a git repo, on the margin
