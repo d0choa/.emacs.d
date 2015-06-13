@@ -123,9 +123,6 @@
 (require 'yasnippet)
 (yas/global-mode 1)
 
-;; ;; r-autoyas
-(require 'r-autoyas)
-(add-hook 'ess-mode-hook 'r-autoyas-ess-activate)
 
 ;; yaml mode
 (require 'yaml-mode)
@@ -271,12 +268,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-auto-show-menu 0.3)
- '(ac-auto-start 4)
- '(ac-quick-help-delay 1)
+ '(ac-auto-show-menu 0.8)
+ '(ac-auto-start 2)
+ '(ac-quick-help-delay 0.1)
  '(auto-save-default nil)
- '(auto-save-default nil)
- '(comint-move-point-for-output nil)
+ '(comint-move-point-for-output t)
  '(comint-scroll-show-maximum-output t)
  '(comint-scroll-to-bottom-on-input t)
  '(compilation-ask-about-save nil)
@@ -404,15 +400,20 @@
      (setq comint-scroll-to-bottom-on-input 'this)
      ))
 
+(require 'r-autoyas)
+
+(defun my-ess-mode-hook ()
+  ;; ;; r-autoyas
+  (r-autoyas-ess-activate)
+  (fci-mode)
+  (rainbow-mode 1) ;; Rainbow colors
+)
+
+(add-hook 'ess-mode-hook 'my-ess-mode-hook)
 
 ; Save/load history of minibuffer
 (savehist-mode 1)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 
 ;; (set-face-attribute 'ac-candidate-face nil   :background "#00222c" :foreground "light gray")
 ;; (set-face-attribute 'ac-selection-face nil   :background "SteelBlue4" :foreground "white")
