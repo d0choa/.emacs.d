@@ -74,7 +74,7 @@
 (scroll-bar-mode -1)
 
 ;; mark fill column
-(require 'fill-column-indicator)
+;; (require 'fill-column-indicator)
 
 ;; Better looking terminal windows
 ;; Space after line numbers
@@ -300,7 +300,7 @@
  '(fci-rule-character-color "#474841")
  '(fci-rule-color "#474841")
  '(fci-rule-column 120)
- '(fill-column 120)
+;; '(fill-column 120)
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(flycheck-lintr-caching nil)
  '(global-linum-mode nil)
@@ -441,7 +441,7 @@
 (defun my-ess-mode-hook ()
   ;; ;; r-autoyas
   (r-autoyas-ess-activate)
-  (fci-mode)
+  ;; (fci-mode nil)
   (rainbow-mode 1) ;; Rainbow colors
 )
 
@@ -457,17 +457,17 @@
 
 (add-hook 'ess-mode (lambda () (add-to-list 'ac-sources 'ac-source-R)))
 
-(defvar sanityinc/fci-mode-suppressed nil)
-(defadvice popup-create (before suppress-fci-mode activate)
-  "Suspend fci-mode while popups are visible"
-  (set (make-local-variable 'sanityinc/fci-mode-suppressed) fci-mode)
-  (when fci-mode
-    (turn-off-fci-mode)))
-(defadvice popup-delete (after restore-fci-mode activate)
-  "Restore fci-mode when all popups have closed"
-  (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
-    (setq sanityinc/fci-mode-suppressed nil)
-    (turn-on-fci-mode)))
+;; (defvar sanityinc/fci-mode-suppressed nil)
+;; (defadvice popup-create (before suppress-fci-mode activate)
+;;   "Suspend fci-mode while popups are visible"
+;;   (set (make-local-variable 'sanityinc/fci-mode-suppressed) fci-mode)
+;;   (when fci-mode
+;;     (turn-off-fci-mode)))
+;; (defadvice popup-delete (after restore-fci-mode activate)
+;;   "Restore fci-mode when all popups have closed"
+;;   (when (and (not popup-instances) sanityinc/fci-mode-suppressed)
+;;     (setq sanityinc/fci-mode-suppressed nil)
+;;     (turn-on-fci-mode)))
 
 ;;; Transparency (in standalone X11) ;;;
 ; from http://www.emacswiki.org/emacs/TransparentEmacs#toc1
