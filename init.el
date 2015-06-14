@@ -154,9 +154,6 @@
   (rainbow-mode 1) ;; Rainbow colors
   )
 
-;; (add-hook 'R-mode-hook 'my-common-hook)
-;; (add-hook 'markdown-mode-hook 'my-common-hook)
-
 ; Load hook
 (add-hook 'prog-mode-hook 'my-common-hook)
 ;; (add-hook 'ess-mode-hook 'my-common-hook)
@@ -241,29 +238,21 @@
 ;; (sr-speedbar-open)
 (sr-speedbar-refresh-turn-off)
 
+;; Polymode
+;;; R modes
+(require 'poly-R)
+(require 'poly-markdown) 
+;;; MARKDOWN
+(add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
 ;;; R modes
 (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
 (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-;; (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
-
-(require 'poly-R)
-(require 'poly-markdown)
-
-(defun rmd-mode ()
-  "ESS Markdown mode for rmd files"
-  (interactive)
-  (require 'poly-R)
-  (require 'poly-markdown) 
-  (poly-markdown+r-mode))
+(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
 
 ;; Let you use markdown buffer easily
-(setq ess-nuke-trailing-whitespace-p nil) 
-
-(add-to-list 'auto-mode-alist '("\\.Rmd" . rmd-mode))
-(add-to-list 'auto-mode-alist '("\\.rmd\\'" . rmd-mode))
+;; (setq ess-nuke-trailing-whitespace-p nil) 
 
 ;; Lintrs
-
 (setq flycheck-lintr-linters "with_defaults(camel_case_linter=NULL, trailing_whitespace_linter=NULL,line_length_linter=lintr::line_length_linter(120))")
 
 ; Variables I set up from within emacs
