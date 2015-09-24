@@ -34,6 +34,7 @@
                       yasnippet
                       r-autoyas
                       expand-region
+                      coffee-mode
                       ))
 
 (let ((default-directory "~/.emacs.d/elpa/"))
@@ -441,11 +442,36 @@
 (savehist-mode 1)
 
 
+;; ;;coffee-script
+(require 'coffee-mode)
+
+(defun coffee-custom ()
+  "coffee-mode-hook"
+ (set (make-local-variable 'tab-width) 2))
+
+(add-hook 'coffee-mode-hook
+  '(lambda() (coffee-custom)))
+
+(define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer)
+(define-key coffee-mode-map [(meta R)] 'coffee-compile-region)
+
+(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+(add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
+
+
 ;; (set-face-attribute 'ac-candidate-face nil   :background "#00222c" :foreground "light gray")
 ;; (set-face-attribute 'ac-selection-face nil   :background "SteelBlue4" :foreground "white")
 ;; (set-face-attribute 'popup-tip-face    nil   :background "#003A4E" :foreground "light gray")
 
 (add-hook 'ess-mode (lambda () (add-to-list 'ac-sources 'ac-source-R)))
+
+
+;; Play with window sizes
+(global-set-key (kbd "s-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "s-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "s-C-<down>") 'shrink-window)
+(global-set-key (kbd "s-C-<up>") 'enlarge-window)
+
 
 ;; (defvar sanityinc/fci-mode-suppressed nil)
 ;; (defadvice popup-create (before suppress-fci-mode activate)
