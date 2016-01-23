@@ -82,7 +82,7 @@
 ;; Space after line numbers
 (when (not(display-graphic-p)) (add-hook 'window-configuration-change-hook
 					 (lambda ()
-					   (setq linum-format "%4d "))))
+					   (setq linum-format " %4d"))))
 ;; Turn off menu bar
 (when (not(display-graphic-p)) (menu-bar-mode -1))
 
