@@ -158,7 +158,7 @@
 
 ; Load hook
 (add-hook 'prog-mode-hook 'my-common-hook)
-;; (add-hook 'ess-mode-hook 'my-common-hook)
+(add-hook 'ess-mode-hook 'my-common-hook)
 
 ;; Activate flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
