@@ -343,6 +343,8 @@
 ;; (set-face-foreground 'git-gutter+-added    "#e7c547")
 ;; (set-face-foreground 'git-gutter+-deleted  "#e7c547")
 
+(setq-default left-fringe-width  15)
+
 ;; Color of the fringe
 (set-face-background 'fringe "#272821")
 
