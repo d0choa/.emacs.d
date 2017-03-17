@@ -1,17 +1,23 @@
+;;; Init.el --- init file created from multiple sources
+;;; Commentary:
+;;; Init file created by David Ochoa combining other multiple files
+;;; Code:
+
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(setq package-archives '(; ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")
+			 ("gnu" . "http://elpa.gnu.org/packages/")))
+
 (package-initialize)
 (when (not package-archive-contents) (package-refresh-contents))
 
 (defvar my-packages '(
                       auto-complete
-                      ac-cider
-                      better-defaults
-                      cider
+                      ;; ac-cider
+                      ;; better-defaults
+                      ;; cider
                       exec-path-from-shell
-                      find-file-in-project
+                      ;; find-file-in-project
                       idle-highlight-mode
                       ido-ubiquitous
                       flx-ido
@@ -22,15 +28,14 @@
                       smex
                       scpaste
                       polymode
-		      textmate
+                      textmate
                       volatile-highlights
-                      color-theme-sanityinc-tomorrow
                       yaml-mode
                       git-gutter-fringe+
                       rainbow-mode
                       fill-column-indicator
                       monokai-theme
-                      sr-speedbar
+                      ;; sr-speedbar
                       yasnippet
                       r-autoyas
                       expand-region
@@ -47,25 +52,54 @@
   (unless (package-installed-p package)
     (package-install package)))
 
-(setq redisplay-dont-pause t)
-(setq scroll-margin 1
-      scroll-conservatively 0
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-(setq-default scroll-up-aggressively 0.01
-	      scroll-down-aggressively 0.01)
+;; (setq redisplay-dont-pause t)
+;; (setq scroll-margin 1
+;;       scroll-conservatively 0
+;;       scroll-up-aggressively 0.01
+;;       scroll-down-aggressively 0.01)
+;; (setq-default scroll-up-aggressively 0.01
+;; 	      scroll-down-aggressively 0.01)
 
 ; Load theme
-(add-to-list 'load-path "~/.emacs.d/themes/")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+;; (add-to-list 'load-path "~/.emacs.d/themes/")
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+(setq ;; foreground and background
+ monokai-foreground     "#eeeeec"
+ monokai-background     "#161719"
+ ;; ;; highlights and comments
+ ;; monokai-comments       "#F8F8F0"
+ ;; monokai-emphasis       "#282C34"
+ ;; monokai-highlight      "#FFB269"
+ ;; monokai-highlight-alt  "#66D9EF"
+ ;; monokai-highlight-line "#1B1D1E"
+ ;; monokai-line-number    "#F8F8F0"
+ ;; ;; colours
+ ;; monokai-blue           "#61AFEF"
+ ;; monokai-cyan           "#56B6C2"
+ monokai-green          "LightSkyBlue"
+ ;; monokai-gray           "#3E4451"
+ ;; monokai-violet         "#C678DD"
+ ;; monokai-red            "#E06C75"
+ ;; monokai-orange         "#D19A66"
+ ;; monokai-yellow         "#E5C07B"
+
+ monokai-blue           "#729fcf"
+ monokai-cyan           "dodger blue"
+ monokai-green          "#6ac214"
+ monokai-gray           "DimGray"
+ monokai-violet         "IndianRed"
+ monokai-red            "tomato"
+ monokai-orange         "orange"
+ monokai-yellow         "#edd400"
+
+ )
 
 (load-theme 'monokai t)
 
-
 ;; ; Font
-;; (set-face-attribute 'default nil :foundry "apple" :family "Monaco")
 ;; set all windows (emacs's "frame") to use font DejaVu Sans Mono
-(set-frame-font "Monaco-12" t t)
+(set-frame-font "Menlo-12" t t)
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
@@ -93,7 +127,7 @@
 (setq next-line-add-newlines nil)
 
 ; Prevent functions to access the clipboard
-(setq x-select-enable-clipboard nil)
+;; (setq x-select-enable-clipboard nil)
 
 ; Yes or No in one character
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -126,7 +160,6 @@
 (require 'yasnippet)
 (yas/global-mode 1)
 
-
 ;; yaml mode
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -154,7 +187,7 @@
   (when (display-graphic-p) (fci-mode nil))
   (linum-mode 1)
   (rainbow-mode 1) ;; Rainbow colors
-  )
+ )
 
 ; Load hook
 (add-hook 'prog-mode-hook 'my-common-hook)
@@ -163,10 +196,13 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 '(flycheck-lintr-caching nil)
 
-(add-hook 'css-mode-hook 'my-css-mode-hook)
+;; Activate pos-tip
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
+
 (defun my-css-mode-hook ()
   (rainbow-mode 1))
-
+(add-hook 'css-mode-hook 'my-css-mode-hook)
 
 ;; Anything that writes to the buffer while the region is active will overwrite
 ;; it, including paste, but also simply typing something or hitting backspace
@@ -179,7 +215,7 @@
 (ac-flyspell-workaround)
 (define-key ac-complete-mode-map [tab] 'ac-expand)
 (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-(define-key ac-completing-map (kbd "C-c h") 'ac-quick-help)  
+(define-key ac-completing-map (kbd "C-c h") 'ac-quick-help)
 
 ;; Electric pair, indentation, layout
 (electric-indent-mode 1)
@@ -249,10 +285,10 @@
 
 ;; Load speedbar in the same frame, do not refresh it
 ;; automatically
-(require 'sr-speedbar)
-(add-hook 'speedbar-mode-hook (lambda () (linum-mode -1)))
-;; (sr-speedbar-open)
-(sr-speedbar-refresh-turn-off)
+;; (require 'sr-speedbar)
+;; (add-hook 'speedbar-mode-hook (lambda () (linum-mode -1)))
+;; ;; (sr-speedbar-open)
+;; (sr-speedbar-refresh-turn-off)
 
 ;; Polymode
 ;;; R modes
@@ -271,28 +307,29 @@
 ;; Lintrs
 (setq flycheck-lintr-linters "with_defaults(camel_case_linter=NULL, trailing_whitespace_linter=NULL,line_length_linter=lintr::line_length_linter(120))")
 
+
+
+
+
 ; Variables I set up from within emacs
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ac-auto-show-menu 0.8)
- '(ac-auto-start 2)
- '(ac-quick-help-delay 0.1)
- '(auto-save-default nil)
  '(comint-move-point-for-output t)
  '(comint-scroll-show-maximum-output t)
  '(comint-scroll-to-bottom-on-input t)
- '(compilation-ask-about-save nil)
- '(compilation-auto-jump-to-first-error nil)
- '(compilation-environment nil)
- '(compilation-read-command nil)
- '(compilation-scroll-output (quote first-error))
- '(compile-command "make")
+ ;; '(compilation-ask-about-save nil)
+ ;; '(compilation-auto-jump-to-first-error nil)
+ ;; '(compilation-environment nil)
+ ;; '(compilation-message-face (quote default))
+ ;; '(compilation-read-command nil)
+ ;; '(compilation-scroll-output (quote first-error))
+ ;; '(compile-command "make -k")
  '(custom-safe-themes
    (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "146cc293f18ea1e17d29833b495193d0455bf1e2b30ecc0f2551a77027338576" "8abee8a14e028101f90a2d314f1b03bed1cde7fd3f1eb945ada6ffc15b1d7d65" "a041a61c0387c57bb65150f002862ebcfe41135a3e3425268de24200b82d6ec9" default)))
+    ("f81a9aabc6a70441e4a742dfd6d10b2bae1088830dc7aba9c9922f4b1bd2ba50" default)))
  '(ess-R-font-lock-keywords
    (quote
     ((ess-R-fl-keyword:modifiers . t)
@@ -303,8 +340,6 @@
      (ess-fl-keyword:fun-calls . t)
      (ess-fl-keyword:numbers . t)
      (ess-R-fl-keyword:F&T . t))))
- '(fci-rule-character-color "#474841")
- '(fci-rule-color "#474841")
  '(fci-rule-column 120)
  '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
  '(flycheck-lintr-caching nil)
@@ -328,39 +363,31 @@
  '(linum-delay t)
  '(linum-eager t)
  '(linum-format " %4d")
- '(magit-use-overlays nil)
+ '(magit-diff-use-overlays nil)
+ '(package-selected-packages
+   (quote
+    (monokai-theme flycheck-pos-tip yaml-mode web-mode volatile-highlights textmate termbright-theme tangotango-theme tango-2-theme smex scpaste rainbow-mode r-autoyas pos-tip polymode noctilux-theme markdown-mode magit ido-ubiquitous idle-highlight-mode git-gutter-fringe+ flycheck flx-ido fill-column-indicator expand-region exec-path-from-shell color-theme-sanityinc-tomorrow color-theme coffee-mode auto-complete)))
  '(show-paren-mode t)
- '(speedbar-default-position (quote left))
- '(sr-speedbar-auto-refresh nil)
- '(sr-speedbar-max-width 30)
- '(sr-speedbar-right-side nil)
- '(sr-speedbar-width-x 30))
+ '(vc-annotate-background-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flycheck-error ((t (:underline "#F92672"))))
- '(flycheck-fringe-error ((t (:background "#272821" :foreground "#FC5C94" :weight bold))))
- '(flycheck-fringe-info ((t (:background "#272821" :foreground "#8DE6F7" :weight bold))))
- '(flycheck-fringe-warning ((t (:background "#272821" :foreground "#F3EA98" :weight bold))))
- '(font-lock-comment-delimiter-face ((t (:inherit font-lock-comment-face :foreground "gray50" :slant normal))))
- '(font-lock-comment-face ((t (:slant italic))))
- '(linum ((t (:inherit (shadow default) : "#272821" :height 0.9)))))
-
+ '(flycheck-fringe-error ((t (:background "#161719" :foreground "#F92672" :weight bold))))
+ '(flycheck-fringe-info ((t (:background "#161719" :foreground "#66D9EF" :weight bold))))
+ '(flycheck-fringe-warning ((t (:background "#161719" :foreground "#E6DB74" :weight bold))))
+ '(mode-line-buffer-id ((t (:foreground "#66D9EF" :weigth bold)))))
 
 ;; Mark additions/deletions in a git repo, on the margin
 (require 'git-gutter-fringe+)
 (global-git-gutter+-mode t)
-;; (set-face-foreground 'git-gutter+-modified "#e7c547")
-;; (set-face-foreground 'git-gutter+-added    "#e7c547")
-;; (set-face-foreground 'git-gutter+-deleted  "#e7c547")
 
 (setq-default left-fringe-width  15)
 
 ;; Color of the fringe
-(set-face-background 'fringe "#272821")
+;; (set-face-background 'fringe "#161719")
 
 ;; web-mode
 (require 'web-mode)
@@ -388,6 +415,26 @@
 (setq comint-scroll-to-bottom-on-input t)
 (setq comint-scroll-to-bottom-on-output t)
 
+
+;; To compile closest Makefile
+(require 'cl) ; If you don't have it already
+(defun* get-closest-pathname (&optional (file "Makefile"))
+  "Determine the pathname of the first instance of FILE starting from the current directory towards root.
+This may not do the correct thing in presence of links. If it does not find FILE, then it shall return the name
+of FILE in the current directory, suitable for creation"
+  (let ((root (expand-file-name "/"))) ; the win32 builds should translate this correctly
+    (expand-file-name file
+		      (loop 
+		       for d = default-directory then (expand-file-name ".." d)
+		       if (file-exists-p (expand-file-name file d))
+		       return d
+		       if (equal d root)
+		       return nil))))
+
+(require 'compile)
+;; (add-hook 'markdown-mode-hook (lambda () (set (make-local-variable 'compile-command) (format "make -f %s" (get-closest-pathname)))))
+;; (add-hook 'ess-mode-hook (lambda () (set (make-local-variable 'compile-command) (format "make -f %s" (get-closest-pathname)))))
+
 ;; Limit buffer size
 (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)
 
@@ -405,26 +452,52 @@
      (R)
      (set-window-buffer w2 "*R*")
      (set-window-buffer w1 w1name))))
+
 (defun my-ess-eval ()
   (interactive)
   (my-ess-start-R)
   (if (and transient-mark-mode mark-active)
       (call-interactively 'ess-eval-region)
     (call-interactively 'ess-eval-line-and-step)))
+
+(defun my-common-hook ()
+  ;; my customizations for all of c-mode and related modes
+  (when (display-graphic-p) (fci-mode nil))
+  (linum-mode 1)
+  (rainbow-mode 1) ;; Rainbow colors
+  )
+
 (add-hook 'ess-mode-hook
           '(lambda()
-             (local-set-key [(shift return)] 'my-ess-eval)))
+             (local-set-key [(shift return)] 'my-ess-eval)
+	     (linum-mode t) ;show line numbers
+	     (when (display-graphic-p) (fci-mode nil))
+	     (set (make-local-variable 'compile-command) (format "make -f %s " (get-closest-pathname)))
+	     ))
+
 (add-hook 'inferior-ess-mode-hook
           '(lambda()
              (local-set-key [up] 'comint-previous-input)
              (local-set-key [down] 'comint-next-input)))
+
 (add-hook 'Rnw-mode-hook
           '(lambda()
-             (local-set-key [(shift return)] 'my-ess-eval)))
+             (local-set-key [(shift return)] 'my-ess-eval)
+	     (linum-mode t) ;show line numbers
+	     (when (display-graphic-p) (fci-mode nil))
+	     ))
+
+(setq-default fill-column 120)
+
+(add-hook 'markdown-mode-hook
+	  (lambda ()
+	    (linum-mode t)
+	    (when (display-graphic-p) (fci-mode nil))
+	    (set (make-local-variable 'compile-command) (format "make -f %s " (get-closest-pathname)))
+	    ))
+
 (require 'ess-site)
 
-; Do not replace _ with <-
-(ess-toggle-underscore nil)
 
 ; does not work for if you press `M-;`, but does work for <TAB>
 (setq ess-fancy-comments nil)
@@ -461,6 +534,8 @@
 (require 'r-autoyas)
 
 (defun my-ess-mode-hook ()
+  ; Do not replace _ with <-
+  (ess-toggle-underscore nil)
   ;; ;; r-autoyas
   (r-autoyas-ess-activate)
   ;; (fci-mode nil)
@@ -519,29 +594,29 @@
 ;;; Transparency (in standalone X11) ;;;
 ; from http://www.emacswiki.org/emacs/TransparentEmacs#toc1
 ;;(set-frame-parameter (selected-frame) 'alpha '(<active> [<inactive>]))
-(set-frame-parameter (selected-frame) 'alpha '(100 85))
-(add-to-list 'default-frame-alist '(alpha 100 85))
-; use C-c t to turn on/off transparency?
-(eval-when-compile (require 'cl))
-(defun toggle-transparency ()
-  (interactive)
-  (if (/=
-       (cadr (frame-parameter nil 'alpha))
-       100)
-      (set-frame-parameter nil 'alpha '(100 100))
-    (set-frame-parameter nil 'alpha '(100 85))))
-(global-set-key (kbd "C-c t") 'toggle-transparency)
+;; (set-frame-parameter (selected-frame) 'alpha '(100 85))
+;; (add-to-list 'default-frame-alist '(alpha 100 85))
+;; ; use C-c t to turn on/off transparency?
+;; (eval-when-compile (require 'cl))
+;; (defun toggle-transparency ()
+;;   (interactive)
+;;   (if (/=
+;;        (cadr (frame-parameter nil 'alpha))
+;;        100)
+;;       (set-frame-parameter nil 'alpha '(100 100))
+;;     (set-frame-parameter nil 'alpha '(100 85))))
+;; (global-set-key (kbd "C-c t") 'toggle-transparency)
 
 ;;; Whitespace. ;;;
 ; Show tabs
-(setq white-space-style '(tabs tab-mark))
+;; (setq white-space-style '(tabs tab-mark))
 ; Show trailing whitespace
 
 ;;; Windowing. ;;;
 ; Winner mode, which makes it easy to go back/forward in window changes
 ; This uses "C-c left/right" to remember window stuff
-(when (fboundp 'winner-mode)
-     (winner-mode 1))
+;; (when (fboundp 'winner-mode)
+;;      (winner-mode 1))
 
 (require 'expand-region)
 (global-set-key (kbd "C-<") 'er/expand-region)
